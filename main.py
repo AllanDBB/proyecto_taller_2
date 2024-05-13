@@ -46,6 +46,19 @@ posibles_respuestas = [
     '¡Absolutamente! El futuro está lleno de infinitas posibilidades, y depende de nosotros elegir el camino que lleva hacia un mundo más sostenible y equitativo. ¿Cómo podemos empezar a caminar en esa dirección hoy mismo?',
     'Sí, es posible, pero solo si nos comprometemos a trabajar juntos y a tomar medidas concretas para hacerlo realidad. ¿Qué acciones podemos tomar hoy para comenzar ese proceso?'
 ]
+datos_curiosos_solarpunk = [
+    'En el solarpunk, la energía solar y otras fuentes renovables son predominantes y se utilizan para alimentar la sociedad.',
+    'Las comunidades solarpunk a menudo promueven la autosuficiencia y la descentralización, fomentando la producción local de alimentos y bienes.',
+    'La arquitectura solarpunk incorpora diseños eco-amigables, como edificios con jardines verticales y techos verdes.',
+    'Los transportes solarpunk suelen ser eléctricos o alimentados por energía solar, y se fomenta el uso de la bicicleta y el transporte público.',
+    'La moda solarpunk se caracteriza por prendas de vestir hechas con materiales sostenibles y tecnología portátil que genera energía.',
+    'En el solarpunk, la tecnología se utiliza para empoderar a las comunidades y mejorar la calidad de vida, en lugar de centrarse únicamente en el lucro.',
+    'El solarpunk promueve la conservación del medio ambiente y la biodiversidad, así como la restauración de ecosistemas degradados.',
+    'Se fomenta la participación ciudadana y la democracia directa en las decisiones que afectan a la comunidad en el solarpunk.',
+    'El arte solarpunk celebra la belleza de la naturaleza y la intersección entre la tecnología y el medio ambiente de manera armoniosa.',
+    'El solarpunk se inspira en movimientos como el ecologismo, el anarquismo y el futurismo, entre otros, para crear visiones utópicas de un futuro sostenible.'
+]
+
 
 
 errores = {
@@ -219,8 +232,9 @@ def visitar_area(area, nombre, areas_verdes):
         return f"Error1 | {errores['Error1']}"
     elif type(areas_verdes) != list:
         return f"Error1 | {errores['Error1']}" 
-    elif areas_verdes[area][1:] == []:
-        print("Esta área está vacía, escoge otra...")
+    elif len(areas_verdes[area]) <= 1:
+        print(f"¡Hola {nombre}! Bienvenido al área verde {areas_verdes[area][0]}")
+        print(f"En este lugar, {Color.RED}no hay personas para conocer.{Color.RESET}")
         return None
     else:
         return visitar_area_aux(area, nombre, areas_verdes)
@@ -229,9 +243,10 @@ def visitar_area_aux(area, nombre, areas_verdes):
     
     #Función auxiliar
 
-    print(f"¡Hola {nombre}! Bienvenido al área verde {areas_verdes[area][0]}")
+    print(f"¡Hola {nombre}! Bienvenido al área verde {Color.GREEN}{areas_verdes[area][0]}{Color.RESET}")
     print(f"En este lugar, encontrarás a las siguientes personas:")
-    print(areas_verdes[area][1:])
+    imprimir = areas_verdes[area][1:]
+    enlistar(imprimir, 1)
     print(f"¿Te gustaría hacer algo más en este lugar?")
     print(f"1. Conocer a una persona.")
     print(f"2. Volver al menú principal.")
@@ -242,14 +257,16 @@ def visitar_area_aux(area, nombre, areas_verdes):
         persona = input()
         persona = convertir_a_entero(persona)
         print(f"¡Excelente elección! Has escogido conocer a {areas_verdes[area][1:][persona]}")
+        limpiar_pantalla()
         print(f"¿Qué te gustaría preguntarle a {areas_verdes[area][1:][persona]}?")
         pregunta = input()
-        print(random.choice(posibles_respuestas))
+        print(random.choice(posibles_respuestas) + "\n" * 5)
         return visitar_area(area, nombre, areas_verdes)
     elif opcion == "2":
+        limpiar_pantalla()
         return None
 
-def enlistar(lista):
+def enlistar(lista, caso=0):
     #E: una lista de listas a imprimir por elemento
     #S: cada elemento de la lista
     #R: la entrada debe ser una lista de listas
@@ -258,17 +275,22 @@ def enlistar(lista):
         return f"Error1 | {errores['Error1']}"
 
     else:
-        return enlistar_aux(lista, 0, len(lista))
+        return enlistar_aux(lista, 0, len(lista), caso)
     
-def enlistar_aux(lista, ini, fin):
+def enlistar_aux(lista, ini, fin, caso):
     #funcion auxiliar
-    
+
     if ini==fin:
         return None
     else:
-        print(ini,'.', lista[ini][0])
-        return enlistar_aux(lista, ini+1, fin)
+        if caso==0:
+            print(f"{ini}. {lista[ini][0]}")
+        else:
+            print(f"{ini}. {lista[ini]}")
+        return enlistar_aux(lista, ini+1, fin, caso)
 
+    
+#Para imprimir los ascii art
 def imprimir_personas():
     print("""                                                                                                                                                                                                                                         
                                                                                         
@@ -297,15 +319,24 @@ def imprimir_personas():
             
 def imprimir_areas_verdes():
     print("""
-          /\
-         /**\
-        /****\   /\
-       /      \ /**\
-      /  /\    /    \        /\    /\  /\      /\            /\/\/\  /\
-     /  /  \  /      \      /  \/\/  \/  \  /\/  \/\  /\  /\/ / /  \/  \
-    /  /    \/ /\     \    /    \ \  /    \/ /   /  \/  \/  \  /    \   \
-   /  /      \/  \/\   \  /      \    /   /    \
-__/__/_______/___/__\___\__________________________________________________""")
+            * *    
+           *    *  *
+      *  *    *     *  *
+     *     *    *  *    *
+ * *   *    *    *    *   *
+ *     *  *    * * .#  *   *
+ *   *     * #.  .# *   *
+  *     "#.  #: #" * *    *
+ *   * * "#. ##"       *
+   *       "###
+             "##
+              ##.
+              .##:
+              :###
+              ;###
+            ,####.
+/\/\/\/\/\/.######.\/\/\/\/\
+  """)
     return None
 
 def imprimir_salida():
@@ -315,11 +346,51 @@ def imprimir_salida():
 \___ \   / _ \  | |  / _` | | '__|    | |_) | | | | | | '_ \  | |/ /
  ___) | | (_) | | | | (_| | | |       |  __/  | |_| | | | | | |   < 
 |____/   \___/  |_|  \__,_| |_|       |_|      \__,_| |_| |_| |_|\_\
+          
              _ __    ___     ___  | | __  ___                                   
             | '__|  / _ \   / __| | |/ / / __|                                      
             | |    | (_) | | (__  |   <  \__ \                                  
             |_|     \___/   \___| |_|\_\ |___/   """)
     return None
+
+def imprimir_dato():
+    print("""
+     .-.                                    ,-.
+  .-(   )-.                              ,-(   )-.
+ (     __) )-.                        ,-(_      __)
+  `-(       __)                      (_    )  __)-'
+    `(____)-',                        `-(____)-'
+  - -  :   :  - -
+      / `-' \
+    ,    |   .
+         .                         _
+                                  >')
+               _   /              (\\         (W)
+              =') //               = \     -. `|'
+               ))////)             = ,-      \(| ,-
+              ( (///))           ( |/  _______\|/____
+~~~~~~~~~~~~~~~`~~~~'~~~~~~~~~~~~~\|,-'::::::::::::::
+            _                 ,----':::::::::::::::::
+         {><_'c   _      _.--':::::::::::::::::::::::
+__,'`----._,-. {><_'c  _-':::::::::::::::::::::::::::
+:.:.:.:.:.:.:.\_    ,-'.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:
+.:.:.:.:.:.:.:.:`--'.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.
+.....................................................
+  """)
+
+def imprimir_instrucciones():
+    # Ház las instrucciones del juego, lo que teníamos antes con todo lo que puedes hacer, usa bastantes cpolores :)
+    limpiar_pantalla()
+    print(f'''
+    {Color.BOLD}Instrucciones:{Color.RESET}
+    {Color.GREEN}SolarPunk{Color.RESET} es un juego de simulación en el que puedes explorar un mundo sostenible y lleno de energía renovable.
+    En este mundo, la naturaleza y la tecnología se han fusionado para crear un entorno equitativo y lleno de vida.
+    Aquí tienes algunas cosas que puedes hacer en el juego:
+    - Crear áreas verdes y llenarlas de plantas, árboles y vida silvestre.
+    - Conocer a personas que viven en las áreas verdes y aprender sobre sus historias y experiencias.
+    ¡Diviértete explorando y creando en el mundo {Color.GREEN}SolarPunk{Color.RESET}!''')
+    return None
+
 def inicio(setup=[True, True, True, True], nombre="", areas_verdes=[], posibles_areas=[], posibles_nombres=[], nombres_areas = []):
 
     if setup[0]:
@@ -375,6 +446,7 @@ def inicio(setup=[True, True, True, True], nombre="", areas_verdes=[], posibles_
                 lista_resultante2 = escoger_cantidad(cantidad, posibles_nombres)
                 nombres_personas = lista_resultante2[0]
                 posibles_nombres = lista_resultante2[1]
+                anadir_random_a_lista(areas_verdes, nombres_personas)
                 
                 print(f"¡Excelente elección! Tus personas son:")
                 enlistar(nombres_personas)
@@ -384,43 +456,69 @@ def inicio(setup=[True, True, True, True], nombre="", areas_verdes=[], posibles_
                 return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
 
     else:
-        print(f"¡Hola {nombre}! ¿En qué puedo ayudarte hoy?")
+        print(f"\n ¡Hola {nombre}! ¿En qué puedo ayudarte hoy?")
         print(f"1. Imprimir instrucciones.")
         print(f"2. Escoger área verde a visitar.")
-        print(f"3. Salir.")
+        print(f"3. Generar más personas.")
+        print(f"4. Dato curioso Solarpunk")
+        print(f"5. Salir.")
 
         opcion = input()
 
         if opcion == "1":
-            print(f'''
-                ¡Instrucciones!
-                En este juego, tendrás la oportunidad de visitar diferentes áreas verdes y conocer a las personas que las habitan.
-                Para empezar, elige una de las siguientes opciones:
-                1. Imprimir instrucciones.
-                2. Escoger área verde a visitar.
-                3. Salir.
-            ''')
-            return inicio(False, nombre, areas_verdes, posibles_areas, posibles_nombres)
+            imprimir_instrucciones()
+            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
         
         elif opcion == "2":
+            limpiar_pantalla()
             print(f"¡Excelente elección! Tus áreas verdes son:")
             enlistar(nombres_areas)
             print(f"Por favor, elige un área verde para visitar: (Escribe el número de la opción empezando en 0)")
 
             area = input()
             area = convertir_a_entero(area)
-            
+            limpiar_pantalla()
             print(f"¡Excelente elección! Has escogido visitar el área verde: {areas_verdes[area][0]}")
             visitar_area(area, nombre, areas_verdes)
             
-            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres)
+            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
         
         elif opcion == "3":
+            limpiar_pantalla()
+            print(f"¿Cuántas personas deseas generar?")
+            cantidad = input()
+            cantidad = convertir_a_entero(cantidad)
+
+            if cantidad<=0:
+                print('Debes ingresar un numero entero positivo mayor que cero')
+                return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+
+            else:
+                lista_resultante2 = escoger_cantidad(cantidad, posibles_nombres)
+                posibles_nombres = lista_resultante2[1]
+
+                print(f"¡Excelente elección! Tus personas son:")
+                enlistar(lista_resultante2[0])
+                print(f"Se agregaran estas personas a tus {Color.GREEN}áreas verdes{Color.RESET}... ¡Ve a saludarlos!")
+                
+                areas_verdes = anadir_random_a_lista(areas_verdes, lista_resultante2[0])
+                nombres_areas = copy.deepcopy(areas_verdes)
+                return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+            
+        elif opcion=="4":
+            limpiar_pantalla()
+            dato=random.randint(0,len(datos_curiosos_solarpunk)-1)
+            print(Color.BOLD + datos_curiosos_solarpunk[dato] + Color.RESET)
+            imprimir_dato()
+            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+            
+        elif opcion == "5":
             print(f"¡Hasta luego {nombre}!")
             imprimir_salida()
             return None
+        
         else:
-            return inicio()
+            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
         
 inicio()
 
