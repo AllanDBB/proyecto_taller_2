@@ -1,4 +1,18 @@
-import math, random, copy
+import random, copy
+
+# Clase para darle color a los textos en la terminal
+class Color:
+    RESET = "\033[0m"
+    BLACK = "\033[30m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    BLUE = "\033[34m"
+    MAGENTA = "\033[35m"
+    CYAN = "\033[36m"
+    WHITE = "\033[37m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
 
 # Variables globales
 nombres = ['Juan', 'José', 'Luis', 'Carlos', 'Alejandro', 'Miguel', 'Javier', 'Fernando', 'Andrés', 'Diego', 'Pedro', 'Daniel', 'Pablo', 'Santiago', 'Manuel', 'Ricardo', 'Gabriel', 'Héctor', 'Francisco', 'Jorge', 'Eduardo', 'Mario', 'Roberto', 'Alberto', 'Gonzalo' , 'María', 'Laura', 'Ana', 'Luz', 'Patricia', 'Elena', 'Sofía', 'Isabel', 'Carmen', 'Gabriela', 'Verónica', 'Claudia', 'Daniela', 'Adriana', 'Fabiola', 'Victoria', 'Natalia', 'Mónica', 'Alejandra', 'Silvia', 'Diana', 'Fernanda', 'Paula', 'Rosa', 'Estela']
@@ -6,47 +20,33 @@ nombres_lugares = ['Corcovado', 'Arenal', 'Tortuguero', 'Monteverde', 'Rincón d
 apellidos = ['González', 'Rodríguez', 'Gómez', 'Fernández', 'López', 'Díaz', 'Martínez', 'Pérez', 'García', 'Sánchez', 'Romero', 'Suárez', 'Torres', 'Rivera', 'Domínguez', 'Vásquez', 'Castillo', 'Rojas', 'Morales', 'Ortega', 'Gutiérrez', 'Reyes', 'Ramírez', 'Jiménez', 'Hernández', 'Álvarez', 'Moreno', 'Muñoz', 'Alonso', 'Silva', 'Valenzuela', 'Medina', 'Ramos', 'Paz', 'Benítez', 'Herrera', 'Aguilar', 'Mendoza', 'Guerrero', 'Flores', 'Pereira', 'Cabrera', 'Chávez', 'Campos', 'Ortiz', 'Vega', 'León', 'Pardo', 'Cortés']
 lugares_naturales = ['Parque', 'Reserva', 'Bosque', 'Selva', 'Montaña', 'Cañón', 'Playa', 'Isla', 'Volcán', 'Parque Nacional', 'Reserva Natural', 'Bosque Nativo', 'Área Protegida', 'Santuario de Fauna y Flora', 'Refugio de Vida Silvestre', 'Área Silvestre Protegida', 'Humedal', 'Selva Virgen', 'Zona de Conservación', 'Biodiversidad', 'Área de Preservación Ambiental', 'Zona de Reserva', 'Zona de Vida Silvestre', 'Área de Conservación', 'Área de Importancia Ecológica', 'Área Natural Protegida', 'Parque Ecológico', 'Corredor Biológico', 'Zona de Reserva Forestal', 'Área de Vida Silvestre', 'Reserva de la Biosfera', 'Área de Protección de Flora y Fauna', 'Zona de Bosque Primario', 'Parque Natural Regional', 'Área de Regeneración Natural', 'Reserva de Recursos Naturales', 'Área de Bosque Virgen', 'Área de Restauración Ecológica', 'Área de Fauna Silvestre', 'Refugio de Biodiversidad', 'Hábitat Natural', 'Santuario de la Naturaleza', 'Área de Conservación de la Biodiversidad', 'Reserva Indígena', 'Área de Bosque Nativo', 'Área de Especies en Peligro', 'Área de Protección de Ecosistemas', 'Área de Bosque Tropical', 'Área de Protección de Recursos Naturales', 'Reserva Forestal Integral', 'Zona de Selva Protegida', 'Refugio de Aves', 'Reserva Marina', 'Área de Bosque Subtropical', 'Área de Recuperación Ambiental', 'Parque Natural Urbano']
 posibles_respuestas = [
-    'Sí, es posible.',
-    'Sí, es posible. ¿Hay algo más en lo que pueda ayudarte?',
-    'No, eso no es posible.',
-    'No, eso no es posible. ¿Puedo ayudarte con algo más?',
-    'Tal vez en ciertas circunstancias.',
-    'Tal vez en ciertas circunstancias. ¿Necesitas más detalles?',
-    'Depende de varios factores.',
-    'Depende de varios factores. ¿Puedo proporcionarte más información?',
-    'Eso está fuera de mi área de conocimiento.',
-    'Eso está fuera de mi área de conocimiento. ¿Hay algo más que pueda hacer por ti?',
-    '¡Por supuesto!',
-    '¡Por supuesto! ¿Hay algo más que te gustaría preguntar?',
-    'Lo siento, no tengo suficiente información para responder.',
-    'Lo siento, no tengo suficiente información para responder. ¿Puedo ayudarte con algo más?',
-    'Es probable.',
-    'Es probable. ¿Hay algo más en lo que pueda ayudarte?',
-    'Es poco probable.',
-    'Es poco probable. ¿Necesitas más información sobre algo más?',
-    'No estoy seguro, ¿podrías darme más detalles?',
-    'No estoy seguro, ¿podrías darme más detalles? Estoy aquí para ayudar.',
-    '¡Claro que sí!',
-    '¡Claro que sí! ¿Puedo hacer algo más por ti?',
-    'No, definitivamente no.',
-    'No, definitivamente no. ¿Necesitas ayuda con algo más?',
-    'Posiblemente, pero no puedo asegurarlo.',
-    'Posiblemente, pero no puedo asegurarlo. ¿Hay algo más que pueda hacer por ti?',
-    'Esa es una pregunta interesante. ¿Qué piensas tú?',
-    'Esa es una pregunta interesante. ¿Qué piensas tú? ¿Necesitas más ayuda?',
-    'Necesitaría más contexto para responder correctamente.',
-    'Necesitaría más contexto para responder correctamente. ¿Puedes proporcionar más detalles?',
-    '¡Absolutamente!',
-    '¡Absolutamente! ¿Puedo ayudarte con algo más?',
-    'No puedo responder eso.',
-    'No puedo responder eso. ¿Hay algo más en lo que pueda ayudarte?',
-    'Es difícil decirlo sin más información.',
-    'Es difícil decirlo sin más información. ¿Puedo ayudarte con otra cosa?',
-    'Es posible, pero no puedo confirmarlo con certeza.',
-    'Es posible, pero no puedo confirmarlo con certeza. ¿Necesitas más información?',
-    '¿Podrías reformular la pregunta, por favor?',
-    '¿Podrías reformular la pregunta, por favor? Estoy aquí para ayudar.',
+    '¡Claro que sí, es posible! El futuro está lleno de posibilidades brillantes. ¿Hay algo más en lo que pueda ayudarte a construir un mañana más sustentable y lleno de energía renovable?',
+    '¡Por supuesto! ¿Qué tal si exploramos juntos cómo hacerlo posible? El sol brilla para todos, después de todo. ¿Hay algo más que te gustaría preguntar sobre este tema o cualquier otro?',
+    'Es probable que en un mundo impulsado por la innovación y la colaboración, veamos soluciones sorprendentes. ¿Te gustaría ser parte de la creación de un futuro más verde y lleno de esperanza?',
+    '¡Absolutamente! En un mundo donde la comunidad se une para resolver los desafíos, ¡casi todo es posible! ¿Puedo ayudarte con algo más para hacer de nuestro mundo un lugar más brillante?',
+    'Es posible, pero necesitamos unirnos para hacerlo realidad. ¿Qué ideas tienes para contribuir al cambio? Juntos podemos hacer cosas extraordinarias.',
+    '¡Por supuesto que sí! El futuro es lo que hacemos de él, y juntos podemos hacerlo más brillante y sostenible. ¿Cómo podemos trabajar juntos para hacerlo posible?',
+    'Definitivamente es una posibilidad emocionante. Imagina un mundo donde la tecnología y la naturaleza coexisten en armonía. ¿Qué papel te gustaría desempeñar en esa visión?',
+    'Absolutamente, pero depende de nosotros convertir esa posibilidad en realidad. ¿Qué acciones podemos tomar hoy para hacer que ese futuro sea más probable?',
+    'Es posible, pero solo si abrazamos la creatividad y la colaboración. ¿Estás listo para ser parte de la solución?',
+    'Sí, definitivamente es posible. ¿Qué ideas tienes para hacer que esa posibilidad se convierta en una realidad palpable?',
+    '¡Claro que sí! En un mundo impulsado por la innovación y la compasión, ¡casi cualquier cosa es posible! ¿Cómo podemos empezar a construir ese mundo hoy mismo?',
+    'Por supuesto que sí, pero necesitaremos pensar de manera creativa y actuar con determinación para hacerlo realidad. ¿Qué primer paso podemos dar juntos?',
+    'Es posible, pero solo si nos comprometemos a hacer cambios significativos en la forma en que vivimos y trabajamos. ¿Estás dispuesto a dar el primer paso hacia ese futuro?',
+    '¡Absolutamente! El futuro está lleno de infinitas posibilidades, y depende de nosotros elegir el camino que lleva hacia un mundo más sostenible y equitativo. ¿Cómo podemos empezar a caminar en esa dirección hoy mismo?',
+    'Sin duda es una posibilidad emocionante. ¿Qué acciones podemos tomar ahora mismo para hacer que esa posibilidad sea más probable?',
+    'Sí, es posible, pero solo si nos comprometemos a trabajar juntos y a tomar medidas concretas para hacerlo realidad. ¿Cómo podemos colaborar para hacer que eso suceda?',
+    'Por supuesto que sí. El futuro está lleno de oportunidades para la innovación y el progreso. ¿Qué papel te gustaría desempeñar en la construcción de ese futuro?',
+    'Definitivamente es una posibilidad, pero necesitaremos pensar de manera creativa y actuar con determinación para hacerla realidad. ¿Qué acciones podemos tomar hoy para comenzar ese proceso?',
+    '¡Claro que sí! El futuro está lleno de posibilidades emocionantes, y depende de nosotros aprovecharlas al máximo. ¿Cómo podemos empezar a convertir esa posibilidad en realidad hoy mismo?',
+    'Sí, es posible, pero solo si nos comprometemos a trabajar juntos y a tomar medidas concretas para hacerlo realidad. ¿Qué primer paso podemos dar en esa dirección?',
+    'Absolutamente, pero necesitaremos unir fuerzas y trabajar juntos para hacerlo realidad. ¿Cómo podemos empezar a construir ese futuro hoy mismo?',
+    'Sin duda es una posibilidad emocionante. ¿Qué acciones podemos tomar ahora mismo para hacer que esa posibilidad sea más probable?',
+    'Es posible, pero solo si nos comprometemos a hacer cambios significativos en la forma en que vivimos y trabajamos. ¿Estás dispuesto a dar el primer paso hacia ese futuro?',
+    '¡Absolutamente! El futuro está lleno de infinitas posibilidades, y depende de nosotros elegir el camino que lleva hacia un mundo más sostenible y equitativo. ¿Cómo podemos empezar a caminar en esa dirección hoy mismo?',
+    'Sí, es posible, pero solo si nos comprometemos a trabajar juntos y a tomar medidas concretas para hacerlo realidad. ¿Qué acciones podemos tomar hoy para comenzar ese proceso?'
 ]
+
 
 errores = {
         'Error1':'El tipo de entrada es incorrecto',
@@ -58,7 +58,7 @@ def limpiar_pantalla():
     '''
     Limpia la pantalla de la terminal.
     '''
-    print("\n" * 100)
+    print("\n" * 50)
 
 def convertir_a_entero(arr):
     '''
@@ -218,11 +218,15 @@ def visitar_area(area, nombre, areas_verdes):
     elif type(nombre) != str:
         return f"Error1 | {errores['Error1']}"
     elif type(areas_verdes) != list:
-        return f"Error1 | {errores['Error1']}"
+        return f"Error1 | {errores['Error1']}" 
+    elif areas_verdes[area][1:] == []:
+        print("Esta área está vacía, escoge otra...")
+        return None
     else:
         return visitar_area_aux(area, nombre, areas_verdes)
 
 def visitar_area_aux(area, nombre, areas_verdes):
+    
     #Función auxiliar
 
     print(f"¡Hola {nombre}! Bienvenido al área verde {areas_verdes[area][0]}")
@@ -245,53 +249,139 @@ def visitar_area_aux(area, nombre, areas_verdes):
     elif opcion == "2":
         return None
 
-def inicio(setup=True, nombre="", areas_verdes=[], posibles_areas=[], posibles_nombres=[], nombres_areas = []):
+def enlistar(lista):
+    #E: una lista de listas a imprimir por elemento
+    #S: cada elemento de la lista
+    #R: la entrada debe ser una lista de listas
 
-    if setup:
+    if type(lista)!=list:
+        return f"Error1 | {errores['Error1']}"
 
-        print(f'''
-            ¡Bienvenido a un mundo SolarPunk!
-            En este mundo, la naturaleza ha recuperado su lugar y la humanidad ha aprendido a convivir con ella.
-            La tecnología y la naturaleza se han fusionado para crear un mundo más sostenible y equitativo.     
-            ''')
-        
-        print(f"Para empezar, ¿Cuál es tu nombre de jugador?")
-        nombre = input()
+    else:
+        return enlistar_aux(lista, 0, len(lista))
+    
+def enlistar_aux(lista, ini, fin):
+    #funcion auxiliar
+    
+    if ini==fin:
+        return None
+    else:
+        print(ini,'.', lista[ini][0])
+        return enlistar_aux(lista, ini+1, fin)
 
-        print(f"¡Hola {nombre}! ¿Cuántas áreas verdes deseas generar?")
-        cantidad = input()
+def imprimir_personas():
+    print("""                                                                                                                                                                                                                                         
+                                                                                        
+  ....     -@@@*.     .:..     *@@@=     ..:.     .%@@#.     ....    .-@@@*.     ...    
+ .#@@@:. .#@@@@@@.  .+@@@%.  .@@@@@@%.  .#@@@=. .-@@@@@@.  .-@@@@:. .#@@@@@%.  .*@@@.   
+  .-@@@%..%@@@@@@..=@@@@@@@*..@@@@@@@..+@@@@@@@:.=@@@@@@: .@@@@@@@%..%@@@@@@..=@@@%.    
+    .*@@@*.*@@@%..@@@@. .%@@@-.%@@@*.:@@@%. -@@@%.-@@@@:.@@@@= .#@@@*.#@@@#.:@@@@:      
+      .#@@@%%%%%%@@@=.    -@@@@%%%%%@@@@-    .*@@@#%%%%%@@@*.    .%@@@%%%%%%@@@=.       
+       .:@@@@@@@@@*.       .-@@@@@@@@@-.       .@@@@@@@@@@..      .:@@@@@@@@@#.         
+         .@@@@@@@@.          -@@@@@@@%          .@@@@@@@@.          -@@@@@@@@           
+         .@@@@@@@@.          -@@@@@@@%          .@@@@@@@@.          -@@@@@@@@           
+         .@@@@@@@@.          -@@@@@@@%          .@@@@@@@@.          -@@@@@@@@           
+         .@@@@@@@@.          -@@@@@@@%          .@@@@@@@@.          -@@@@@@@@           
+         .@@@@@@@@.          -@@@@@@@@          .@@@@@@@@.          -@@@@@@@@           
+         .@@@%@@@@.          -@@@#@@@@          .@@@@#@@@.          -@@@#@@@@           
+         .@@@*%@@@.          -@@@+@@@@          .@@@@*@@@.          -@@@+%@@@           
+         .@@@*%@@@.          -@@@+@@@@          .@@@@*@@@.          -@@@+%@@@           
+         .@@@*%@@@.          -@@@+@@@@          .@@@@*@@@.          -@@@+%@@@           
+         .@@@*%@@@.          -@@@+@@@@          .@@@@*@@@.          -@@@+%@@@           
+         .@@@*%@@@.          -@@@+@@@@          .@@@@*@@@.          -@@@+%@@@           
+         .@@@+#@@@.          -@@@=@@@%.         .@@@@+@@@.          :@@@+%@@%.          
+          ........           ..:. ....           .... ...            ........           
+                                                                                        
+                                                                     """)
+    return None
+            
+def imprimir_areas_verdes():
+    print("""
+          /\
+         /**\
+        /****\   /\
+       /      \ /**\
+      /  /\    /    \        /\    /\  /\      /\            /\/\/\  /\
+     /  /  \  /      \      /  \/\/  \/  \  /\/  \/\  /\  /\/ / /  \/  \
+    /  /    \/ /\     \    /    \ \  /    \/ /   /  \/  \/  \  /    \   \
+   /  /      \/  \/\   \  /      \    /   /    \
+__/__/_______/___/__\___\__________________________________________________""")
+    return None
 
-        cantidad = convertir_a_entero(cantidad)
+def imprimir_salida():
+    print("""                                     
+ ____            _                     ____                    _    
+/ ___|    ___   | |   __ _   _ __     |  _ \   _   _   _ __   | | __
+\___ \   / _ \  | |  / _` | | '__|    | |_) | | | | | | '_ \  | |/ /
+ ___) | | (_) | | | | (_| | | |       |  __/  | |_| | | | | | |   < 
+|____/   \___/  |_|  \__,_| |_|       |_|      \__,_| |_| |_| |_|\_\
+             _ __    ___     ___  | | __  ___                                   
+            | '__|  / _ \   / __| | |/ / / __|                                      
+            | |    | (_) | | (__  |   <  \__ \                                  
+            |_|     \___/   \___| |_|\_\ |___/   """)
+    return None
+def inicio(setup=[True, True, True, True], nombre="", areas_verdes=[], posibles_areas=[], posibles_nombres=[], nombres_areas = []):
 
-        # Generación de las áreas verdes.
-        posibles_areas = generar_nombres(1)
-        lista_resultante = escoger_cantidad(cantidad, posibles_areas)
-        areas_verdes = lista_resultante[0]
-        nombres_areas = copy.deepcopy(areas_verdes) 
+    if setup[0]:
 
-        posibles_areas = lista_resultante[1]        
+        if setup[1]:
+            limpiar_pantalla()
+            print(f'''
+                ¡Bienvenido a un mundo {Color.GREEN}SolarPunk {Color.RESET}!
+                En este mundo, la naturaleza ha recuperado su lugar y la humanidad ha aprendido a convivir con ella.
+                La tecnología y la naturaleza se han fusionado para crear un mundo más sostenible y equitativo.     
+                ''')
+            
+            print(f"Para empezar, ¿Cuál es tu nombre de jugador?")
+            nombre = input(Color.BOLD + "Escribe aquí: " + Color.RESET)
 
-        print(f"¡Excelente elección! Tus áreas verdes son:")
-        print(areas_verdes)
+            limpiar_pantalla()
+              
+        if setup[2] == True:
+            print(f"¡Excelente {nombre}! Para comenzar {Color.GREEN}¿cuántas áreas verdes deseas generar?{Color.RESET}")
+            cantidad = input()
+            cantidad = convertir_a_entero(cantidad)
 
-        print(f"Ahora, ¿cuántas personas deseas generar? Para empezar")
-        cantidad = input()
-        cantidad = convertir_a_entero(cantidad)
+            if cantidad<=0:
+                print('Debes ingresar un numero entero positivo mayor que cero')
+                return inicio([True, False, True, True], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+            else:
+                # Generación de las áreas verdes.
+                posibles_areas = generar_nombres(1)
+                lista_resultante = escoger_cantidad(cantidad, posibles_areas)
+                areas_verdes = lista_resultante[0]
+                nombres_areas = copy.deepcopy(areas_verdes) 
 
-        # Generación de los nombres de las personas.
-        posibles_nombres = generar_nombres(0)
-        lista_resultante2 = escoger_cantidad(cantidad, posibles_nombres)
-        nombres_personas = lista_resultante2[0]
-        posibles_nombres = lista_resultante2[1]
-        
-        print(f"¡Excelente elección! Tus personas son:")
-        print(nombres_personas)
-        print(f"Se agregaran estas personas a tus áreas verdes...")
+                posibles_areas = lista_resultante[1]        
 
-        areas_verdes = anadir_random_a_lista(areas_verdes, nombres_personas)
-        print(areas_verdes)
-        
-        return inicio(False, nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+                limpiar_pantalla()
+                print(f"¡Excelente elección! Tus áreas verdes son:")
+                enlistar(areas_verdes)
+                imprimir_areas_verdes()
+
+        if setup[3]:
+            
+            print(f"Ahora, ¿cuántas personas deseas generar? Para empezar")
+            cantidad = input()
+            cantidad = convertir_a_entero(cantidad)
+
+            if cantidad<=0:
+                print('Debes ingresar un numero entero positivo mayor que cero')
+                return inicio([True, False, False, True], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
+            
+            else:
+                # Generación de los nombres de las personas.
+                posibles_nombres = generar_nombres(0)
+                lista_resultante2 = escoger_cantidad(cantidad, posibles_nombres)
+                nombres_personas = lista_resultante2[0]
+                posibles_nombres = lista_resultante2[1]
+                
+                print(f"¡Excelente elección! Tus personas son:")
+                enlistar(nombres_personas)
+                imprimir_personas()
+                print(f"Se agregaran estas personas a tus {Color.GREEN}áreas verdes{Color.RESET}... ¡Ve a saludarlos!")
+                
+                return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres, nombres_areas)
 
     else:
         print(f"¡Hola {nombre}! ¿En qué puedo ayudarte hoy?")
@@ -314,7 +404,7 @@ def inicio(setup=True, nombre="", areas_verdes=[], posibles_areas=[], posibles_n
         
         elif opcion == "2":
             print(f"¡Excelente elección! Tus áreas verdes son:")
-            print(nombres_areas)
+            enlistar(nombres_areas)
             print(f"Por favor, elige un área verde para visitar: (Escribe el número de la opción empezando en 0)")
 
             area = input()
@@ -323,11 +413,14 @@ def inicio(setup=True, nombre="", areas_verdes=[], posibles_areas=[], posibles_n
             print(f"¡Excelente elección! Has escogido visitar el área verde: {areas_verdes[area][0]}")
             visitar_area(area, nombre, areas_verdes)
             
-            return inicio(False, nombre, areas_verdes, posibles_areas, posibles_nombres)
+            return inicio([False, False, False, False], nombre, areas_verdes, posibles_areas, posibles_nombres)
         
         elif opcion == "3":
             print(f"¡Hasta luego {nombre}!")
+            imprimir_salida()
             return None
+        else:
+            return inicio()
         
 inicio()
 
